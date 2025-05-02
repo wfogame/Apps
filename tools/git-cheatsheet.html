@@ -1,0 +1,155 @@
+Git & Node.js Master Cheatsheet
+Copy this entire text for quick reference!
+
+GIT COMMANDS
+bash
+# Basics  
+git init                          # Create new repo  
+git add <file>                    # Stage a file  
+git add .                         # Stage all changes  
+git commit -m "message"           # Commit staged changes  
+git status                        # View changes  
+git log --oneline                 # Compact commit history  
+
+# Remote Repos  
+git remote add origin <URL>       # Link to GitHub  
+git push -u origin main           # First push (use "master" if needed)  
+git push                          # Push commits (after -u)  
+git pull                          # Pull latest changes  
+
+# Branches  
+git branch                        # List branches  
+git checkout -b <branch-name>     # Create + switch to branch  
+git checkout <branch>             # Switch branches  
+git merge <branch>                # Merge branch into current  
+git branch -d <branch>            # Delete branch  
+
+# Undoing  
+git restore <file>                # Discard unstaged changes  
+git restore --staged <file>       # Unstage a file  
+git commit --amend                # Edit last commit's message  
+NODE.JS CORE MODULES
+1. http Module
+Purpose: Create HTTP servers/clients.
+
+Server Example:
+
+javascript
+const http = require("http");  
+const server = http.createServer((req, res) => {  
+  res.writeHead(200, { "Content-Type": "text/html" });  
+  res.end("<h1>Hello World</h1>");  
+});  
+server.listen(3000);  
+Client Request Example:
+
+javascript
+const req = http.request("http://api.example.com", (res) => {  
+  let data = "";  
+  res.on("data", (chunk) => data += chunk); // Collect data  
+  res.on("end", () => console.log(data));   // Process data  
+});  
+req.end(); // Send the request  
+2. fs (File System)
+Read/Write Files:
+
+javascript
+const fs = require("fs");  
+fs.readFile("file.txt", "utf8", (err, data) => {  
+  if (err) throw err;  
+  console.log(data);  
+});  
+fs.writeFile("file.txt", "Hello", (err) => {  
+  if (err) throw err;  
+});  
+3. path Module
+Handle File Paths:
+
+javascript
+const path = require("path");  
+const fullPath = path.join(__dirname, "folder", "file.txt");  
+console.log(path.extname("image.png")); // .png  
+4. url Module
+Parse URLs:
+
+javascript
+const url = require("url");  
+const parsedUrl = url.parse("http://localhost:3000/tools?name=devtunnel", true);  
+console.log(parsedUrl.query.name); // "devtunnel"  
+DEV TUNNEL (PUBLIC URL FOR LOCALHOST)
+Commands:
+
+bash
+npx devtunnel --port 3000             # Basic usage  
+npx devtunnel --port 3000 --subdomain myapp # Custom subdomain  
+npx devtunnel status                  # List active tunnels  
+Troubleshooting:
+
+Port in use: Change to 3001 or run killall node (Mac/Linux).
+
+Invalid subdomain: Use a unique name (e.g., yourname-dev).
+
+PROJECT STRUCTURE
+your-project/  
+├── .git/                  # Git repo  
+├── server.js              # Node.js server  
+├── index.html             # Main page  
+├── script.js              # Client-side JS  
+├── style.css              # Styling  
+├── package.json           # Project config  
+└── tools/                 # Tool guides  
+    ├── devtunnel.html     # DevTunnel guide  
+    └── git-tips.html      # Git cheatsheet  
+ESSENTIAL CONCEPTS
+Asynchronous Code:
+
+Node.js uses callbacks for non-blocking operations (e.g., reading files, handling requests).
+
+Example:
+
+javascript
+fs.readFile("file.txt", (err, data) => {  
+  if (err) throw err;  
+  console.log(data);  
+});  
+MIME Types:
+
+Tell browsers how to handle files:
+
+Type	Header
+HTML	text/html
+CSS	text/css
+JavaScript	application/javascript
+JSON	application/json
+Error Handling:
+
+Always check for err in callbacks.
+
+Use HTTP status codes:
+
+200 (OK), 404 (Not Found), 500 (Server Error).
+
+TROUBLESHOOTING TIPS
+Port Conflicts:
+
+bash
+lsof -i :3000    # Find process using port (Mac/Linux)  
+taskkill /PID <pid> /F  # Windows  
+File Not Found:
+
+Use absolute paths: path.join(__dirname, "file.txt").
+
+Git Push Rejected:
+
+bash
+git pull --rebase origin main  # Sync and retry  
+git push -f origin main        # Force push (use with caution!)  
+RESOURCES
+Git Pro Book: https://git-scm.com/book/en/v2
+
+Node.js Docs: https://nodejs.org/api/
+
+DevTunnel Guide: https://www.npmjs.com/package/devtunnel
+
+HTTP Status Codes: https://httpstatuses.com
+
